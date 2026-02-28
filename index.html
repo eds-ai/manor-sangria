@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manor Sangria</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --wine:    #6B1A2A;
+      --wine-dk: #3D0B16;
+      --gold:    #C8972B;
+      --cream:   #FAF3E8;
+      --text:    #2A1A1A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--wine-dk);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(30, 6, 14, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,151,43,0.2);
+    }
+    .nav-logo {
+      font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;
+      color: var(--gold); text-decoration: none; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--cream); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(107,26,42,0.8) 0%, transparent 70%),
+        linear-gradient(180deg, #1a040d 0%, #3D0B16 50%, #1a040d 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C8972B' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: normal; line-height: 1.05;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #FAF3E8 30%, #C8972B 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 1.15rem; color: rgba(250,243,232,0.7);
+      max-width: 520px; line-height: 1.7; margin-bottom: 48px;
+    }
+    .hero-btn {
+      display: inline-block; padding: 16px 40px;
+      border: 1px solid var(--gold); color: var(--gold);
+      text-decoration: none; letter-spacing: 2px;
+      text-transform: uppercase; font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+    .hero-btn:hover {
+      background: var(--gold); color: var(--wine-dk);
+    }
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(250,243,232,0.4); font-size: 0.75rem; letter-spacing: 2px;
+    }
+    .scroll-hint .arrow {
+      width: 1px; height: 48px;
+      background: linear-gradient(180deg, rgba(200,151,43,0.6), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* ── SECTION DIVIDER ── */
+    .section-label {
+      text-align: center; padding: 80px 24px 20px;
+      font-size: 0.75rem; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .section-title {
+      text-align: center; font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: normal; margin-bottom: 80px;
+      color: var(--cream);
+    }
+
+    /* ── BLENDS SECTION ── */
+    .blends { padding: 60px 0 120px; }
+
+    .blend-row {
+      display: flex; align-items: center;
+      max-width: 1100px; margin: 0 auto 100px;
+      padding: 0 40px; gap: 80px;
+      opacity: 0;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .blend-row.from-left  { transform: translateX(-80px); }
+    .blend-row.from-right { transform: translateX(80px); flex-direction: row-reverse; }
+    .blend-row.visible { opacity: 1; transform: translateX(0); }
+
+    /* Jar */
+    .jar-wrap {
+      flex: 0 0 280px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .jar {
+      width: 200px; height: 240px;
+      position: relative;
+      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
+    }
+    .jar svg { width: 100%; height: 100%; }
+
+    /* Blend info */
+    .blend-info { flex: 1; }
+    .blend-num {
+      font-size: 0.7rem; letter-spacing: 4px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .blend-name {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: normal; margin-bottom: 20px;
+      color: var(--cream); line-height: 1.1;
+    }
+    .blend-desc {
+      font-size: 1.05rem; line-height: 1.8;
+      color: rgba(250,243,232,0.75); margin-bottom: 24px;
+    }
+    .blend-tags {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .tag {
+      padding: 6px 16px; border: 1px solid rgba(200,151,43,0.4);
+      border-radius: 20px; font-size: 0.78rem;
+      color: var(--gold); letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .blend-divider {
+      width: 48px; height: 1px; background: var(--gold);
+      margin-bottom: 20px; opacity: 0.5;
+    }
+
+    /* ── WHERE TO FIND ── */
+    .find {
+      background: rgba(107,26,42,0.25);
+      border-top: 1px solid rgba(200,151,43,0.15);
+      border-bottom: 1px solid rgba(200,151,43,0.15);
+      padding: 100px 24px; text-align: center;
+    }
+    .find h2 {
+      font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: normal;
+      color: var(--cream); margin-bottom: 16px;
+    }
+    .find p { color: rgba(250,243,232,0.6); margin-bottom: 48px; font-size: 1rem; }
+    .find-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .find-link {
+      padding: 14px 28px; border: 1px solid rgba(200,151,43,0.5);
+      color: var(--cream); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 1px; transition: all 0.3s;
+    }
+    .find-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 48px 24px;
+      color: rgba(250,243,232,0.25); font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+      .blend-row, .blend-row.from-right {
+        flex-direction: column; text-align: center; gap: 40px;
+      }
+      .blend-tags { justify-content: center; }
+      .blend-divider { margin: 0 auto 20px; }
+      .jar-wrap { flex: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Manor Sangria</a>
+  <div class="nav-links">
+    <a href="#blends">The Blends</a>
+    <a href="#find">Find Us</a>
+    <a href="https://www.instagram.com/manorsangria" target="_blank">Instagram</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">New York's Finest</p>
+  <h1>Manor<br>Sangria</h1>
+  <p class="hero-sub">Handcrafted in small batches. Fresh fruit. Real ingredients. Eight blends, zero shortcuts.</p>
+  <a href="#blends" class="hero-btn">Explore the Blends</a>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- BLENDS -->
+<section class="blends" id="blends">
+  <p class="section-label">The Collection</p>
+  <h2 class="section-title">Find Your Blend</h2>
+
+  <!-- 1. Classic -->
+  <div class="blend-row from-left">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8B1A2A"/>
+              <stop offset="100%" stop-color="#4A0E18"/>
+            </linearGradient>
+            <linearGradient id="lid1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#E8B84B"/>
+              <stop offset="100%" stop-color="#8B6B1A"/>
+            </linearGradient>
+          </defs>
+          <!-- Lid -->
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <!-- Jar body -->
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g1)"/>
+          <!-- Glass sheen -->
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <!-- Label -->
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">CLASSIC</text>
+          <!-- Fruit bits floating -->
+          <circle cx="75" cy="85" r="5" fill="rgba(255,180,100,0.5)"/>
+          <circle cx="130" cy="75" r="4" fill="rgba(255,140,60,0.4)"/>
+          <circle cx="150" cy="95" r="3" fill="rgba(200,80,80,0.5)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 01</p>
+      <h3 class="blend-name">Classic Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">The one that started it all. Crisp apples and bright citrus come together in a sangria that's balanced, refreshing, and dangerously easy to drink. Clean, familiar, and impossible to put down.</p>
+      <div class="blend-tags">
+        <span class="tag">Apple</span>
+        <span class="tag">Citrus</span>
+        <span class="tag">Crisp</span>
+        <span class="tag">Refreshing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Summer -->
+  <div class="blend-row from-right">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#D4713A"/>
+              <stop offset="100%" stop-color="#8B3A10"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g2)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">SUMMER</text>
+          <circle cx="70" cy="80" r="6" fill="rgba(255,200,120,0.6)"/>
+          <circle cx="140" cy="90" r="5" fill="rgba(255,160,80,0.5)"/>
+          <circle cx="115" cy="70" r="4" fill="rgba(255,220,140,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 02</p>
+      <h3 class="blend-name">Summer Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Sun-ripened peaches at peak sweetness, pressed into every pour. Warm, fruity, and bright — like the best day of the season captured in a jar. Made for rooftops, beach days, and slow afternoons.</p>
+      <div class="blend-tags">
+        <span class="tag">Peach</span>
+        <span class="tag">Sweet</span>
+        <span class="tag">Warm</span>
+        <span class="tag">Fruity</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Mango Habanero -->
+  <div class="blend-row from-left">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#E8821A"/>
+              <stop offset="100%" stop-color="#9B3A0A"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g3)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="100" width="100" height="80" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="122" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="143" x2="140" y2="143" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="155" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" fill="#6B1A2A">MANGO</text>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" fill="#6B1A2A">HABANERO</text>
+          <circle cx="68" cy="78" r="5" fill="rgba(255,220,50,0.6)"/>
+          <circle cx="145" cy="88" r="4" fill="rgba(255,80,30,0.6)"/>
+          <circle cx="110" cy="68" r="5" fill="rgba(255,180,50,0.5)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 03</p>
+      <h3 class="blend-name">Mango Habanero</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Tropical sweetness meets a slow, building heat. Ripe mango lays down the foundation, habanero brings the fire. The balance is the magic — sweet first, then the kick hits just right. Not for the timid.</p>
+      <div class="blend-tags">
+        <span class="tag">Mango</span>
+        <span class="tag">Habanero</span>
+        <span class="tag">Sweet</span>
+        <span class="tag">🌶 Spicy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Jalapeño -->
+  <div class="blend-row from-right">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2E7D32"/>
+              <stop offset="100%" stop-color="#1B5E20"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g4)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">JALAPEÑO</text>
+          <circle cx="72" cy="82" r="4" fill="rgba(100,200,100,0.6)"/>
+          <circle cx="138" cy="76" r="5" fill="rgba(80,180,80,0.5)"/>
+          <circle cx="110" cy="92" r="3" fill="rgba(120,220,120,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 04</p>
+      <h3 class="blend-name">Jalapeño Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">The pepper flavor, none of the pain. Seeds and ribs removed so you get all of the jalapeño's earthy, vegetal depth without the heat. Unexpected, refreshing, and surprisingly addictive. A crowd conversation-starter.</p>
+      <div class="blend-tags">
+        <span class="tag">Jalapeño</span>
+        <span class="tag">Mild</span>
+        <span class="tag">Earthy</span>
+        <span class="tag">Unique</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Island -->
+  <div class="blend-row from-left">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#006994"/>
+              <stop offset="100%" stop-color="#004060"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g5)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">ISLAND</text>
+          <circle cx="75" cy="80" r="5" fill="rgba(255,235,180,0.5)"/>
+          <circle cx="135" cy="85" r="4" fill="rgba(200,240,200,0.5)"/>
+          <circle cx="105" cy="68" r="4" fill="rgba(255,220,100,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 05</p>
+      <h3 class="blend-name">Island Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Close your eyes, take a sip. Creamy coconut and tangy pineapple transport you somewhere with warm sand and no agenda. Tropical, smooth, and unapologetically vacation-in-a-jar.</p>
+      <div class="blend-tags">
+        <span class="tag">Coconut</span>
+        <span class="tag">Pineapple</span>
+        <span class="tag">Tropical</span>
+        <span class="tag">Smooth</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Mermaid -->
+  <div class="blend-row from-right">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#C94B8A"/>
+              <stop offset="100%" stop-color="#006994"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g6)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">MERMAID</text>
+          <circle cx="70" cy="78" r="5" fill="rgba(255,150,200,0.6)"/>
+          <circle cx="142" cy="88" r="4" fill="rgba(200,255,240,0.5)"/>
+          <circle cx="110" cy="70" r="4" fill="rgba(255,120,180,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 06</p>
+      <h3 class="blend-name">Mermaid Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Where the sea meets the sweetness. Rich coconut swirls with ripe strawberry in a blend that's as dreamy as it looks. Light, lush, and slightly magical — the one that turns the most heads at the table.</p>
+      <div class="blend-tags">
+        <span class="tag">Coconut</span>
+        <span class="tag">Strawberry</span>
+        <span class="tag">Sweet</span>
+        <span class="tag">Dreamy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Sea Salted Watermelon -->
+  <div class="blend-row from-left">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g7" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#E8394A"/>
+              <stop offset="100%" stop-color="#8B1A2A"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g7)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="100" width="100" height="80" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="120" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="141" x2="140" y2="141" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="153" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#6B1A2A">SEA SALTED</text>
+          <text x="100" y="166" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#6B1A2A">WATERMELON</text>
+          <circle cx="72" cy="80" r="6" fill="rgba(255,180,180,0.6)"/>
+          <circle cx="138" cy="85" r="4" fill="rgba(255,200,200,0.5)"/>
+          <circle cx="108" cy="68" r="4" fill="rgba(255,150,150,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 07</p>
+      <h3 class="blend-name">Sea Salted Watermelon</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">The unexpected combination that makes total sense on the first sip. Juicy, fresh watermelon with a kiss of sea salt that amplifies every note. Sweet, savory, and completely original. You'll think about this one after it's gone.</p>
+      <div class="blend-tags">
+        <span class="tag">Watermelon</span>
+        <span class="tag">Sea Salt</span>
+        <span class="tag">Savory-Sweet</span>
+        <span class="tag">Bold</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Holiday -->
+  <div class="blend-row from-right">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g8" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#B22222"/>
+              <stop offset="100%" stop-color="#5C0A0A"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g8)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">HOLIDAY</text>
+          <circle cx="75" cy="82" r="4" fill="rgba(200,50,50,0.6)"/>
+          <circle cx="138" cy="75" r="5" fill="rgba(220,80,80,0.5)"/>
+          <circle cx="108" cy="90" r="3" fill="rgba(255,200,200,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 08</p>
+      <h3 class="blend-name">Holiday Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Tart cranberry and warm cinnamon — the combination that makes every gathering feel like a celebration. Seasonal in spirit, remarkable in the glass. The one people ask for by name at every holiday table.</p>
+      <div class="blend-tags">
+        <span class="tag">Cranberry</span>
+        <span class="tag">Cinnamon</span>
+        <span class="tag">Warm</span>
+        <span class="tag">Festive</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Autumn -->
+  <div class="blend-row from-left">
+    <div class="jar-wrap">
+      <div class="jar">
+        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#B5651D"/>
+              <stop offset="100%" stop-color="#6B3A10"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
+          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
+          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g9)"/>
+          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
+          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
+          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
+          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
+          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">AUTUMN</text>
+          <circle cx="72" cy="78" r="5" fill="rgba(200,120,40,0.6)"/>
+          <circle cx="140" cy="88" r="4" fill="rgba(180,100,30,0.5)"/>
+          <circle cx="108" cy="68" r="4" fill="rgba(220,150,60,0.4)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="blend-info">
+      <p class="blend-num">No. 09</p>
+      <h3 class="blend-name">Autumn Blend</h3>
+      <div class="blend-divider"></div>
+      <p class="blend-desc">Pumpkin meets a full spice cabinet — nutmeg, cloves, ginger, allspice, and cinnamon layered into something genuinely complex. This isn't a pumpkin spice trend. This is fall, distilled. Rich, warming, and worth every sip as the temperature drops.</p>
+      <div class="blend-tags">
+        <span class="tag">Pumpkin</span>
+        <span class="tag">Nutmeg</span>
+        <span class="tag">Cloves</span>
+        <span class="tag">Ginger</span>
+        <span class="tag">Cinnamon</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- WHERE TO FIND -->
+<section class="find" id="find">
+  <h2>Find a Bottle</h2>
+  <p>Available at select retailers in New York — or shipped direct to your door.</p>
+  <div class="find-links">
+    <a class="find-link" href="https://www.postwineandspirits.wine/s/search?q=manor%20sangria" target="_blank">Post Wine & Spirits — Larchmont, NY</a>
+    <a class="find-link" href="https://www.winebazaar.com/websearch_results.html?kw=manor+sangria" target="_blank">Wine Bazaar — New Rochelle, NY</a>
+  </div>
+  <p style="margin-top:32px; font-size:0.78rem; color:rgba(250,243,232,0.3); letter-spacing:1px;">
+    Direct shipping available in: AK · LA · ND · CA · NE · OR · DC · NH · VA · FL · NM · NY · WV · WY
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="color:var(--gold); font-size:1.1rem; margin-bottom:12px;">MANOR SANGRIA</p>
+  <p>© 2026 Manor Sangria Inc. · New York</p>
+  <p style="margin-top:8px;"><a href="https://www.instagram.com/manorsangria" target="_blank" style="color:rgba(250,243,232,0.4); text-decoration:none;">@manorsangria</a></p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const rows = document.querySelectorAll('.blend-row');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  rows.forEach(row => observer.observe(row));
+</script>
+
+</body>
+</html>
