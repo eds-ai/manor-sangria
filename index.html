@@ -129,17 +129,20 @@
     .blend-row.from-right { transform: translateX(80px); flex-direction: row-reverse; }
     .blend-row.visible { opacity: 1; transform: translateX(0); }
 
-    /* Jar */
+
     .jar-wrap {
-      flex: 0 0 280px;
+      flex: 0 0 300px;
       display: flex; flex-direction: column; align-items: center;
     }
-    .jar {
-      width: 200px; height: 240px;
-      position: relative;
-      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
+    .jar-img {
+      width: 280px; height: 360px;
+      object-fit: cover; object-position: center;
+      border-radius: 12px;
+      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
+      transition: transform 0.4s ease;
     }
-    .jar svg { width: 100%; height: 100%; }
+    .jar-img:hover { transform: scale(1.03); }
+
 
     /* Blend info */
     .blend-info { flex: 1; }
@@ -243,37 +246,7 @@
   <!-- 1. Classic -->
   <div class="blend-row from-left">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#8B1A2A"/>
-              <stop offset="100%" stop-color="#4A0E18"/>
-            </linearGradient>
-            <linearGradient id="lid1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#E8B84B"/>
-              <stop offset="100%" stop-color="#8B6B1A"/>
-            </linearGradient>
-          </defs>
-          <!-- Lid -->
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <!-- Jar body -->
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g1)"/>
-          <!-- Glass sheen -->
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <!-- Label -->
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">CLASSIC</text>
-          <!-- Fruit bits floating -->
-          <circle cx="75" cy="85" r="5" fill="rgba(255,180,100,0.5)"/>
-          <circle cx="130" cy="75" r="4" fill="rgba(255,140,60,0.4)"/>
-          <circle cx="150" cy="95" r="3" fill="rgba(200,80,80,0.5)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/classic.jpg" alt="Classic Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 01</p>
@@ -292,28 +265,7 @@
   <!-- 2. Summer -->
   <div class="blend-row from-right">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#D4713A"/>
-              <stop offset="100%" stop-color="#8B3A10"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g2)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">SUMMER</text>
-          <circle cx="70" cy="80" r="6" fill="rgba(255,200,120,0.6)"/>
-          <circle cx="140" cy="90" r="5" fill="rgba(255,160,80,0.5)"/>
-          <circle cx="115" cy="70" r="4" fill="rgba(255,220,140,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/summer.jpg" alt="Summer Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 02</p>
@@ -332,29 +284,7 @@
   <!-- 3. Mango Habanero -->
   <div class="blend-row from-left">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#E8821A"/>
-              <stop offset="100%" stop-color="#9B3A0A"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g3)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="100" width="100" height="80" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="122" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="143" x2="140" y2="143" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="155" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" fill="#6B1A2A">MANGO</text>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" fill="#6B1A2A">HABANERO</text>
-          <circle cx="68" cy="78" r="5" fill="rgba(255,220,50,0.6)"/>
-          <circle cx="145" cy="88" r="4" fill="rgba(255,80,30,0.6)"/>
-          <circle cx="110" cy="68" r="5" fill="rgba(255,180,50,0.5)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/mango-habanero.jpg" alt="Mango Habanero">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 03</p>
@@ -373,28 +303,7 @@
   <!-- 4. Jalapeño -->
   <div class="blend-row from-right">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#2E7D32"/>
-              <stop offset="100%" stop-color="#1B5E20"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g4)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">JALAPEÑO</text>
-          <circle cx="72" cy="82" r="4" fill="rgba(100,200,100,0.6)"/>
-          <circle cx="138" cy="76" r="5" fill="rgba(80,180,80,0.5)"/>
-          <circle cx="110" cy="92" r="3" fill="rgba(120,220,120,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/jalapeno.jpg" alt="Jalapeño Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 04</p>
@@ -413,28 +322,7 @@
   <!-- 5. Island -->
   <div class="blend-row from-left">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#006994"/>
-              <stop offset="100%" stop-color="#004060"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g5)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">ISLAND</text>
-          <circle cx="75" cy="80" r="5" fill="rgba(255,235,180,0.5)"/>
-          <circle cx="135" cy="85" r="4" fill="rgba(200,240,200,0.5)"/>
-          <circle cx="105" cy="68" r="4" fill="rgba(255,220,100,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/island.jpg" alt="Island Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 05</p>
@@ -453,28 +341,7 @@
   <!-- 6. Mermaid -->
   <div class="blend-row from-right">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#C94B8A"/>
-              <stop offset="100%" stop-color="#006994"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g6)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">MERMAID</text>
-          <circle cx="70" cy="78" r="5" fill="rgba(255,150,200,0.6)"/>
-          <circle cx="142" cy="88" r="4" fill="rgba(200,255,240,0.5)"/>
-          <circle cx="110" cy="70" r="4" fill="rgba(255,120,180,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/mermaid.jpg" alt="Mermaid Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 06</p>
@@ -493,29 +360,7 @@
   <!-- 7. Sea Salted Watermelon -->
   <div class="blend-row from-left">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g7" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#E8394A"/>
-              <stop offset="100%" stop-color="#8B1A2A"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g7)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="100" width="100" height="80" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="120" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="141" x2="140" y2="141" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="153" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#6B1A2A">SEA SALTED</text>
-          <text x="100" y="166" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#6B1A2A">WATERMELON</text>
-          <circle cx="72" cy="80" r="6" fill="rgba(255,180,180,0.6)"/>
-          <circle cx="138" cy="85" r="4" fill="rgba(255,200,200,0.5)"/>
-          <circle cx="108" cy="68" r="4" fill="rgba(255,150,150,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/sea-salted-watermelon.jpg" alt="Sea Salted Watermelon">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 07</p>
@@ -534,28 +379,7 @@
   <!-- 8. Holiday -->
   <div class="blend-row from-right">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g8" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#B22222"/>
-              <stop offset="100%" stop-color="#5C0A0A"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g8)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">HOLIDAY</text>
-          <circle cx="75" cy="82" r="4" fill="rgba(200,50,50,0.6)"/>
-          <circle cx="138" cy="75" r="5" fill="rgba(220,80,80,0.5)"/>
-          <circle cx="108" cy="90" r="3" fill="rgba(255,200,200,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/holiday.jpg" alt="Holiday Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 08</p>
@@ -574,28 +398,7 @@
   <!-- 9. Autumn -->
   <div class="blend-row from-left">
     <div class="jar-wrap">
-      <div class="jar">
-        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#B5651D"/>
-              <stop offset="100%" stop-color="#6B3A10"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="18" width="80" height="22" rx="4" fill="url(#lid1)"/>
-          <rect x="55" y="36" width="90" height="10" rx="2" fill="#A07820"/>
-          <path d="M45 50 Q38 50 36 60 L28 210 Q27 225 40 228 L160 228 Q173 225 172 210 L164 60 Q162 50 155 50 Z" fill="url(#g9)"/>
-          <path d="M55 55 Q50 55 49 65 L44 200" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
-          <rect x="50" y="110" width="100" height="70" rx="4" fill="rgba(250,243,232,0.92)"/>
-          <text x="100" y="134" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#6B1A2A" font-weight="bold">MANOR</text>
-          <text x="100" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#3D0B16">SANGRIA</text>
-          <line x1="60" y1="155" x2="140" y2="155" stroke="#C8972B" stroke-width="0.5"/>
-          <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B1A2A">AUTUMN</text>
-          <circle cx="72" cy="78" r="5" fill="rgba(200,120,40,0.6)"/>
-          <circle cx="140" cy="88" r="4" fill="rgba(180,100,30,0.5)"/>
-          <circle cx="108" cy="68" r="4" fill="rgba(220,150,60,0.4)"/>
-        </svg>
-      </div>
+      <img class="jar-img" src="img/autumn.jpg" alt="Autumn Blend">
     </div>
     <div class="blend-info">
       <p class="blend-num">No. 09</p>
