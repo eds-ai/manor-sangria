@@ -203,14 +203,49 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { gap: 20px; }
+      /* Nav */
+      nav { padding: 14px 20px; }
+      .nav-logo { font-size: 1.1rem; letter-spacing: 1px; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 0.72rem; letter-spacing: 0.8px; }
+
+      /* Hero */
+      .hero { padding: 100px 20px 60px; }
+      .hero-sub { font-size: 1rem; }
+      .hero-btn { padding: 13px 28px; font-size: 0.78rem; }
+
+      /* Section headers */
+      .section-label { padding: 50px 20px 14px; }
+      .section-title { font-size: 1.8rem; margin-bottom: 40px; padding: 0 20px; }
+
+      /* Blend rows */
       .blend-row, .blend-row.from-right {
-        flex-direction: column; text-align: center; gap: 40px;
+        flex-direction: column; text-align: center;
+        gap: 28px; padding: 0 20px; margin-bottom: 60px;
       }
       .blend-tags { justify-content: center; }
       .blend-divider { margin: 0 auto 20px; }
-      .jar-wrap { flex: none; }
+      .jar-wrap { flex: none; width: 100%; }
+      .jar-img {
+        width: 100%; max-width: 280px; height: 300px;
+        margin: 0 auto; display: block;
+      }
+      .blend-name { font-size: 1.6rem; }
+      .blend-desc { font-size: 0.95rem; }
+
+      /* Find section */
+      .find { padding: 60px 20px; }
+      .find h2 { font-size: 1.6rem; }
+      .find-links { flex-direction: column; align-items: center; }
+      .find-link { width: 100%; max-width: 340px; text-align: center; }
+
+      /* Landscape photo */
+      section img[alt="Manor Sangria at the market"] { max-height: 260px; }
+    }
+
+    @media (max-width: 400px) {
+      .nav-links a:last-child { display: none; }
+      .hero h1 { font-size: 2.8rem; }
     }
   </style>
 </head>
